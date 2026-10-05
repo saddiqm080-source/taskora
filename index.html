@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskora - Online Editing Jobs</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 25px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 16px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 25px auto;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0 15px;
+      border: 1px solid #d5d9e2;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .job {
+      border-top: 1px solid #e5e7eb;
+      padding: 16px 0;
+    }
+
+    .job:first-child {
+      border-top: none;
+    }
+
+    .job h3 {
+      margin-bottom: 7px;
+    }
+
+    .job p {
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Taskora</h1>
+    <p>Find editing jobs. Hire editors. Get work done.</p>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Post an Editing Job</h2>
+
+      <form id="jobForm">
+
+        <label>Job Title</label>
+        <input
+          type="text"
+          id="title"
+          placeholder="Example: Edit my YouTube video"
+          required
+        >
+
+        <label>Editing Type</label>
+        <select id="type">
+          <option>Video Editing</option>
+          <option>Photo Editing</option>
+          <option>Document Editing</option>
+          <option>Audio Editing</option>
+          <option>Other</option>
+        </select>
+
+        <label>Budget (USD)</label>
+        <input
+          type="number"
+          id="budget"
+          placeholder="Example: 20"
+          min="1"
+          required
+        >
+
+        <label>Job Description</label>
+        <textarea
+          id="description"
+          placeholder="Describe the work you need..."
+          required
+        ></textarea>
+
+        <button type="submit">Post Job</button>
+
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Latest Jobs</h2>
+
+      <div id="jobs">
+
+        <div class="job">
+          <h3>YouTube Video Editing</h3>
+          <p>Need an editor for a short YouTube video.</p>
+          <p><strong>Budget:</strong> $25</p>
+          <span class="tag">Video Editing</span>
+        </div>
+
+        <div class="job">
+          <h3>Product Photo Editing</h3>
+          <p>Need several product photos cleaned and edited.</p>
+          <p><strong>Budget:</strong> $15</p>
+          <span class="tag">Photo Editing</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 Taskora. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("jobForm").addEventListener("submit", function(event) {
+
+      event.preventDefault();
+
+      const title = document.getElementById("title").value;
+      const type = document.getElementById("type").value;
+      const budget = document.getElementById("budget").value;
+      const description = document.getElementById("description").value;
+
+      const job = document.createElement("div");
+
+      job.className = "job";
+
+      job.innerHTML = `
+        <h3>${title}</h3>
+        <p>${description}</p>
+        <p><strong>Budget:</strong> $${budget}</p>
+        <span class="tag">${type}</span>
+      `;
+
+      document.getElementById("jobs").prepend(job);
+
+      document.getElementById("jobForm").reset();
+
+      alert("Your job has been posted!");
+    });
+  </script>
+
+</body>
+  </html>
