@@ -212,35 +212,70 @@
   <footer>
     © 2026 Taskora. All rights reserved.
   </footer>
+<script>
+  const form = document.getElementById("jobForm");
+  const jobsContainer = document.getElementById("jobs");
 
-  <script>
-    document.getElementById("jobForm").addEventListener("submit", function(event) {
+  form.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-      event.preventDefault();
+    const title = document.getElementById("title").value.trim();
+    const type = document.getElementById("type").value;
+    const budget = Number(document.getElementById("budget").value);
+    const description = document.getElementById("description").value.trim();
 
-      const title = document.getElementById("title").value;
-      const type = document.getElementById("type").value;
-      const budget = document.getElementById("budget").value;
-      const description = document.getElementById("description").value;
+    const { error } = await supabaseClient
+      .from("jobs")
+      .insert([{
+        title: title,
+        editing_type: type,
+        budget: budget,
+        description: description
+      }]);
 
-      const job = document.createElement("div");
+    if (error) {
+      console.error(error);
+      alert("Job post failed: " + error.message);
+      return;
+    }
 
-      job.className = "job";
+    form.reset();
 
-      job.innerHTML = `
-        <h3>${title}</h3>
-        <p>${description}</p>
-        <p><strong>Budget:</strong> $${budget}</p>
-        <span class="tag">${type}</span>
+    alert("Your job has been posted!");
+
+    loadJobs();
+  });
+
+  async function loadJobs() {
+    const { data, error } = await supabaseClient
+      .from("jobs")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    jobsContainer.innerHTML = "";
+
+    data.forEach(function(job) {
+      const div = document.createElement("div");
+      div.className = "job";
+
+      div.innerHTML = `
+        <h3>${job.title}</h3>
+        <p>${job.description}</p>
+        <p><strong>Budget:</strong> $${job.budget}</p>
+        <span class="tag">${job.editing_type}</span>
       `;
 
-      document.getElementById("jobs").prepend(job);
-
-      document.getElementById("jobForm").reset();
-
-      alert("Your job has been posted!");
+      jobsContainer.appendChild(div);
     });
-  </script>
+  }
+
+  loadJobs();
+    </script>
 
 </body>
   </html>
