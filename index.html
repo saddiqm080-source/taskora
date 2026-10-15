@@ -276,6 +276,66 @@
 
   loadJobs();
     </script>
+<section id="auth-section" style="padding:20px; margin:20px; background:#fff; border-radius:12px;">
+  <h2>Taskora Account</h2>
 
+  <label for="auth-email">Email Address</label>
+  <input id="auth-email" type="email" placeholder="Enter your email" style="display:block;width:95%;padding:12px;margin:10px 0;">
+
+  <label for="auth-password">Password</label>
+  <input id="auth-password" type="password" placeholder="At least 6 characters" style="display:block;width:95%;padding:12px;margin:10px 0;">
+
+  <button type="button" onclick="taskoraSignUp()">Register</button>
+  <button type="button" onclick="taskoraSignIn()">Login</button>
+  <button type="button" onclick="taskoraSignOut()">Logout</button>
+
+  <p id="auth-message">Register or log in to your Taskora account.</p>
+</section>
+
+<script>
+async function taskoraSignUp() {
+  const email = document.getElementById("auth-email").value.trim();
+  const password = document.getElementById("auth-password").value;
+
+  if (!email || password.length < 6) {
+    alert("Enter a valid email and a password of at least 6 characters.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      emailRedirectTo: "https://o80-source.github.io/taskora/"
+    }
+  });
+
+  document.getElementById("auth-message").textContent = error
+    ? error.message
+    : "Registration submitted. Check your email to confirm your account.";
+}
+
+async function taskoraSignIn() {
+  const email = document.getElementById("auth-email").value.trim();
+  const password = document.getElementById("auth-password").value;
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  document.getElementById("auth-message").textContent = error
+    ? error.message
+    : "You are logged in to Taskora!";
+}
+
+async function taskoraSignOut() {
+  const { error } = await supabaseClient.auth.signOut();
+
+  document.getElementById("auth-message").textContent = error
+    ? error.message
+    : "You have logged out.";
+}
+</script>
 </body>
   </html>
